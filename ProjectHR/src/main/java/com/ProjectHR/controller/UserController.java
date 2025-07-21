@@ -10,10 +10,13 @@ import com.ProjectHR.service.UserService;
 import jakarta.validation.Valid;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
@@ -35,6 +38,13 @@ public class UserController {
     public ResponseEntity<userResponseDTO> createUser(@Valid @RequestBody userRequestDTO userRequest) {
         userResponseDTO createdUser = userService.createUser(userRequest);
         return ResponseEntity.ok().body(createdUser);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<userResponseDTO> updateUser(@PathVariable UUID id,
+            @Valid @RequestBody userRequestDTO userRequest) {
+        userResponseDTO updatedUser = userService.updateUser(id, userRequest);
+        return ResponseEntity.ok().body(updatedUser);
     }
 
 }

@@ -10,4 +10,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface userRepository extends JpaRepository<User, UUID> {
     boolean existsByEmail(String email);
+
+    boolean existsByEmailAndIdNot(String email, UUID id);
 }
