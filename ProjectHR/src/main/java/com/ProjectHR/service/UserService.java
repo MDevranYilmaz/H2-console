@@ -65,4 +65,10 @@ public class UserService {
         return Usermap.toDto(updatedUser);
     }
 
+    public void deleteUser(UUID id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
+        userRepository.delete(user);
+    }
+
 }
