@@ -7,6 +7,7 @@ import java.util.List;
 import com.ProjectHR.dto.userRequestDTO;
 import com.ProjectHR.dto.userResponseDTO;
 import com.ProjectHR.entity.User;
+import com.ProjectHR.exception.EmailAlreadyExistsException;
 import com.ProjectHR.mapper.Usermap;
 import com.ProjectHR.repository.userRepository;
 
@@ -29,6 +30,9 @@ public class UserService {
     }
 
     public userResponseDTO createUser(userRequestDTO userRequestDto) {
+        if (userRepository.existsByEmail(userRequestDto.getEmail())) {
+            throw new EmailAlreadyExistsException("Email already exists: " + userRequestDto.getEmail());
+        }
         User user = userRepository.save(Usermap.toEntity(userRequestDto));
         return Usermap.toDto(user);
     }
