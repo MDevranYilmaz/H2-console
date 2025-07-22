@@ -13,6 +13,8 @@ public class Usermap {
         dto.setRole(user.getRole());
         dto.setEmail(user.getEmail());
         dto.setUsername(user.getUsername());
+        dto.setCondition(user.getCondition());
+        dto.setDetails(user.getDetails());
         return dto;
     }
 
@@ -24,6 +26,8 @@ public class Usermap {
         user.setUsername(userRequest.getUsername());
         user.setPassword(userRequest.getPassword());
         user.setRole(userRequest.getRole());
+        user.setCondition(userRequest.getCondition());
+        user.setDetails(userRequest.getDetails());
         return user;
     }
 }

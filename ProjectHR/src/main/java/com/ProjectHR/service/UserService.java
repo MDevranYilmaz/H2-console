@@ -1,5 +1,6 @@
 package com.ProjectHR.service;
 
+import com.ProjectHR.grpc.ApprovalServiceGRPCClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -18,9 +19,11 @@ public class UserService {
 
     @Autowired
     private userRepository userRepository;
+    private final ApprovalServiceGRPCClient approvalServiceGRPCClient;
 
-    public UserService(userRepository userRepository1) {
+    public UserService(userRepository userRepository1, ApprovalServiceGRPCClient approvalServiceGRPCClient) {
         this.userRepository = userRepository1;
+        this.approvalServiceGRPCClient = approvalServiceGRPCClient;
     }
 
     public List<userResponseDTO> getAllUsers() {
@@ -40,6 +43,8 @@ public class UserService {
                                                                                                          // mechanism
         }
         User user = userRepository.save(Usermap.toEntity(userRequestDto));
+
+        approvalServiceGRPCClient.createApprovalResponse(user.getId().toString(), user.getUsername(), user.getCondition().toString(), user.getDetails());
         return Usermap.toDto(user);
     }
 
