@@ -3,6 +3,8 @@ package com.ProjectHR.grpc;
 import approval.ApprovalServiceGrpc;
 import approval.CreateApprovalRequest;
 import approval.CreateApprovalResponse;
+import approval.UpdateApprovalRequest;
+import approval.UpdateApprovalResponse;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import org.slf4j.Logger;
@@ -30,6 +32,17 @@ public class ApprovalServiceGRPCClient {
                 .setDetails(details).build();
         CreateApprovalResponse response = approvalServiceBlockingStub.createApproval(request);
         log.info("Received response from approval grpc service: {}", response);
+        return response;
+    }
+
+    public UpdateApprovalResponse updateApprovalStatus(String id, String status, String details) {
+        UpdateApprovalRequest request = UpdateApprovalRequest.newBuilder()
+                .setId(id)
+                .setStatus(status)
+                .setDetails(details)
+                .build();
+        UpdateApprovalResponse response = approvalServiceBlockingStub.updateApproval(request);
+        log.info("Received update response from approval grpc service: {}", response);
         return response;
     }
 }

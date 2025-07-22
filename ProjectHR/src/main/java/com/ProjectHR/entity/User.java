@@ -14,7 +14,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-
 @Entity
 @Table(name = "users")
 public class User {
@@ -48,6 +47,17 @@ public class User {
 
     @Column(name = "details")
     private String details;
+
+    @Column(name = "submitted_by")
+    private UUID submittedBy;
+
+    public UUID getSubmittedBy() {
+        return submittedBy;
+    }
+
+    public void setSubmittedBy(UUID submittedBy) {
+        this.submittedBy = submittedBy;
+    }
 
     public String getDetails() {
         return details;
@@ -121,7 +131,8 @@ public class User {
         this.password = password;
     }
 
-    public User(UUID id, String firstName, String lastName, Role role, String email, String username, String password, Condition condition) {
+    public User(UUID id, String firstName, String lastName, Role role, String email, String username, String password,
+            Condition condition) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;

@@ -5,7 +5,8 @@ option java_package = "approval";
 
 service ApprovalService {
   rpc CreateApproval(CreateApprovalRequest) returns (CreateApprovalResponse);
-  }
+  rpc UpdateApproval(UpdateApprovalRequest) returns (UpdateApprovalResponse);
+}
 
   message CreateApprovalRequest {
     string id = 1;
@@ -18,3 +19,13 @@ service ApprovalService {
     string id = 1;
     string status = 2;
   }
+message UpdateApprovalRequest {
+  string id = 1;
+  string status = 2;
+  string details = 3;
+}
+
+message UpdateApprovalResponse {
+  string id = 1;
+  string status = 2;
+}

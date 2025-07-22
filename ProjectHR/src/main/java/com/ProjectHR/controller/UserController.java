@@ -34,6 +34,25 @@ public class UserController {
         return ResponseEntity.ok().body(users);
     }
 
+    @GetMapping("/hr/{hrId}")
+    public ResponseEntity<List<userResponseDTO>> getWorkersByHR(@PathVariable UUID hrId) {
+        List<userResponseDTO> workers = userService.getWorkersByHR(hrId);
+        return ResponseEntity.ok().body(workers);
+    }
+
+    @GetMapping("/admin")
+    public ResponseEntity<List<userResponseDTO>> getAllWorkers() {
+        List<userResponseDTO> workers = userService.getAllWorkers();
+        return ResponseEntity.ok().body(workers);
+    }
+
+    @GetMapping("/admin/{status}")
+    public ResponseEntity<List<userResponseDTO>> getWorkersByStatus(@PathVariable String status) {
+        List<userResponseDTO> workers = userService
+                .getWorkersByStatus(Enum.valueOf(com.ProjectHR.enums.Condition.class, status));
+        return ResponseEntity.ok().body(workers);
+    }
+
     @PostMapping
     public ResponseEntity<userResponseDTO> createUser(@Valid @RequestBody userRequestDTO userRequest) {
         userResponseDTO createdUser = userService.createUser(userRequest);

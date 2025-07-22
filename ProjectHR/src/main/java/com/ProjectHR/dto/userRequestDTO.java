@@ -1,5 +1,7 @@
 package com.ProjectHR.dto;
 
+import java.util.UUID;
+
 import com.ProjectHR.enums.Condition;
 import com.ProjectHR.enums.Role;
 
@@ -38,12 +40,23 @@ public class userRequestDTO {
     @Size(max = 700, message = "details cannot exceed 700 characters")
     private String details;
 
+    @NotNull
+    private UUID submittedBy;
+
+    public UUID getSubmittedBy() {
+        return submittedBy;
+    }
+
+    public void setSubmittedBy(UUID submittedBy) {
+        this.submittedBy = submittedBy;
+    }
 
     public @NotBlank @Size(max = 700, message = "details cannot exceed 700 characters") String getDetails() {
         return details;
     }
 
-    public void setDetails(@NotBlank @Size(max = 700, message = "details cannot exceed 700 characters") String details) {
+    public void setDetails(
+            @NotBlank @Size(max = 700, message = "details cannot exceed 700 characters") String details) {
         this.details = details;
     }
 
@@ -71,11 +84,13 @@ public class userRequestDTO {
         return role;
     }
 
-    public void setFirstName(@NotBlank @Size(max = 100, message = "First name cannot exceed 100 characters") String firstName) {
+    public void setFirstName(
+            @NotBlank @Size(max = 100, message = "First name cannot exceed 100 characters") String firstName) {
         this.firstName = firstName;
     }
 
-    public void setLastName(@NotBlank @Size(max = 100, message = "Last name cannot exceed 100 characters") String lastName) {
+    public void setLastName(
+            @NotBlank @Size(max = 100, message = "Last name cannot exceed 100 characters") String lastName) {
         this.lastName = lastName;
     }
 
@@ -83,11 +98,13 @@ public class userRequestDTO {
         this.email = email;
     }
 
-    public void setUsername(@NotBlank @Size(max = 50, message = "Username cannot exceed 50 characters") String username) {
+    public void setUsername(
+            @NotBlank @Size(max = 50, message = "Username cannot exceed 50 characters") String username) {
         this.username = username;
     }
 
-    public void setPassword(@NotBlank @Size(max = 100, message = "Password cannot exceed 100 characters") String password) {
+    public void setPassword(
+            @NotBlank @Size(max = 100, message = "Password cannot exceed 100 characters") String password) {
         this.password = password;
     }
 

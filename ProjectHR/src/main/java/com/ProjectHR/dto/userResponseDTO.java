@@ -12,6 +12,15 @@ public class userResponseDTO {
     private String username;
     private Condition condition;
     private String details;
+    private String submittedBy;
+
+    public String getSubmittedBy() {
+        return submittedBy;
+    }
+
+    public void setSubmittedBy(String submittedBy) {
+        this.submittedBy = submittedBy;
+    }
 
     public String getDetails() {
         return details;
@@ -77,7 +86,8 @@ public class userResponseDTO {
         this.username = username;
     }
 
-    public userResponseDTO(String id, String firstName, String lastName, Role role, String email, String username, Condition condition) {
+    public userResponseDTO(String id, String firstName, String lastName, Role role, String email, String username,
+            Condition condition) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -87,5 +97,6 @@ public class userResponseDTO {
         this.condition = condition;
     }
 
-    public userResponseDTO() {}
+    public userResponseDTO() {
+    }
 }

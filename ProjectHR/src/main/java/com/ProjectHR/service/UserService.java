@@ -9,6 +9,8 @@ import java.util.UUID;
 import com.ProjectHR.dto.userRequestDTO;
 import com.ProjectHR.dto.userResponseDTO;
 import com.ProjectHR.entity.User;
+import com.ProjectHR.enums.Condition;
+import com.ProjectHR.enums.Role;
 import com.ProjectHR.exception.EmailAlreadyExistsException;
 import com.ProjectHR.exception.UserNotFoundException;
 import com.ProjectHR.mapper.Usermap;
@@ -44,7 +46,8 @@ public class UserService {
         }
         User user = userRepository.save(Usermap.toEntity(userRequestDto));
 
-        approvalServiceGRPCClient.createApprovalResponse(user.getId().toString(), user.getUsername(), user.getCondition().toString(), user.getDetails());
+        approvalServiceGRPCClient.createApprovalResponse(user.getId().toString(), user.getUsername(),
+                user.getCondition().toString(), user.getDetails());
         return Usermap.toDto(user);
     }
 
@@ -70,4 +73,18 @@ public class UserService {
         return Usermap.toDto(updatedUser);
     }
 
+    public List<userResponseDTO> getWorkersByHR(UUID hrId) {
+        List<User> workers = userRepository.findAllByRoleAndSubmittedBy(Role.WORKER, hrId);
+        return workers.stream().map(Usermap::toDto).toList();
+    }
+
+    public List<userResponseDTO> getAllWorkers() {
+        List<User> workers = userRepository.findAllByRole(Role.WORKER);
+        return workers.stream().map(Usermap::toDto).toList();
+    }
+
+    public List<userResponseDTO> getWorkersByStatus(Condition condition) {
+        List<User> workers = userRepository.findAllByRoleAndCondition(Role.WORKER, condition);
+        return workers.stream().map(Usermap::toDto).toList();
+    }
 }

@@ -15,6 +15,7 @@ public class Usermap {
         dto.setUsername(user.getUsername());
         dto.setCondition(user.getCondition());
         dto.setDetails(user.getDetails());
+        dto.setSubmittedBy(user.getSubmittedBy().toString());
         return dto;
     }
 
@@ -28,6 +29,7 @@ public class Usermap {
         user.setRole(userRequest.getRole());
         user.setCondition(userRequest.getCondition());
         user.setDetails(userRequest.getDetails());
+        user.setSubmittedBy(userRequest.getSubmittedBy());
         return user;
     }
 }
