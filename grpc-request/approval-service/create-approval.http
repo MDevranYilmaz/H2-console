@@ -1,0 +1,10 @@
+
+GRPC localhost:9090/ApprovalService/CreateApproval
+
+{
+  "id": "12345",
+  "name": "john",
+  "status": "PENDING",
+  "details": "Not good enough"
+
+}
