@@ -10,3 +10,5 @@ DELETE FROM users;
 INSERT INTO users (id, first_name, last_name, role, email, username, password, Status, details, submitted_by)
 VALUES
     ( gen_random_uuid(), 'Admin User', 'Lastname', 'ADMIN', 'admin@example.com', 'admin', '$2a$12$.zWe162EC5wbryPkpgKfEex2VS7UBNxxhyb7c4wfAbtU0cm/LJZ3.', 'APPROVED', '21', 'a4c6223c-1472-475b-951f-06f63f30a28f');
+
+--username admin password 1234 (from decoder)
