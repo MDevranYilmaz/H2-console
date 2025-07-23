@@ -1,6 +1,9 @@
 package com.ProjectHR.service;
 
 import com.ProjectHR.grpc.ApprovalServiceGRPCClient;
+
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -40,6 +43,7 @@ public class UserService {
         return userDtos;
     }
 
+    @CacheEvict(value = { "allWorkers", "workersByHR", "workersByStatus" }, allEntries = true)
     public userResponseDTO createUser(userRequestDTO userRequestDto) {
         if (userRepository.existsByEmail(userRequestDto.getEmail())) {
             throw new EmailAlreadyExistsException("Email already exists: " + userRequestDto.getEmail()); // special
@@ -56,6 +60,7 @@ public class UserService {
         return Usermap.toDto(user);
     }
 
+    @CacheEvict(value = { "allWorkers", "workersByHR", "workersByStatus" }, allEntries = true)
     public userResponseDTO updateUser(UUID id, userRequestDTO userRequestDto) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + id)); // special exception for
@@ -90,16 +95,19 @@ public class UserService {
         return Usermap.toDto(updatedUser);
     }
 
+    @Cacheable(value = "workersByHR", key = "#hrId")
     public List<userResponseDTO> getWorkersByHR(UUID hrId) {
         List<User> workers = userRepository.findAllByRoleAndSubmittedBy(Role.WORKER, hrId);
         return workers.stream().map(Usermap::toDto).toList();
     }
 
+    @Cacheable("allWorkers")
     public List<userResponseDTO> getAllWorkers() {
         List<User> workers = userRepository.findAllByRole(Role.WORKER);
         return workers.stream().map(Usermap::toDto).toList();
     }
 
+    @Cacheable(value = "workersByStatus", key = "#status")
     public List<userResponseDTO> getWorkersByStatus(Condition condition) {
         List<User> workers = userRepository.findAllByRoleAndCondition(Role.WORKER, condition);
         return workers.stream().map(Usermap::toDto).toList();
