@@ -20,16 +20,17 @@ import com.ProjectHR.repository.userRepository;
 @Service
 public class UserService {
 
-    @Autowired
     private userRepository userRepository;
     private final ApprovalServiceGRPCClient approvalServiceGRPCClient;
     private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
 
     public UserService(userRepository userRepository1, ApprovalServiceGRPCClient approvalServiceGRPCClient,
-            PasswordEncoder passwordEncoder) {
+            PasswordEncoder passwordEncoder, EmailService emailService) {
         this.userRepository = userRepository1;
         this.approvalServiceGRPCClient = approvalServiceGRPCClient;
         this.passwordEncoder = passwordEncoder;
+        this.emailService = emailService;
     }
 
     public List<userResponseDTO> getAllUsers() {
@@ -67,14 +68,26 @@ public class UserService {
         } // if the user try to update the email with an existing one, it will throw an
           // exception
 
+        Condition previousCondition = user.getCondition();
+
         user.setFirstName(userRequestDto.getFirstName());
         user.setLastName(userRequestDto.getLastName());
         user.setEmail(userRequestDto.getEmail());
         user.setUsername(userRequestDto.getUsername());
         user.setPassword(userRequestDto.getPassword());
         user.setRole(userRequestDto.getRole());
+        user.setCondition(userRequestDto.getCondition());
 
         User updatedUser = userRepository.save(user);
+
+        if (previousCondition == Condition.PENDING &&
+                (user.getCondition() == Condition.APPROVED || user.getCondition() == Condition.REJECTED)) {
+            emailService.sendStatusUpdateEmail(
+                    user.getEmail(),
+                    user.getFirstName(),
+                    user.getCondition().name());
+        }
+
         return Usermap.toDto(updatedUser);
     }
 
@@ -92,4 +105,5 @@ public class UserService {
         List<User> workers = userRepository.findAllByRoleAndCondition(Role.WORKER, condition);
         return workers.stream().map(Usermap::toDto).toList();
     }
+
 }
