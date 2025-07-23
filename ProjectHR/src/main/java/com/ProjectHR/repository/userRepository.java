@@ -4,6 +4,7 @@ import com.ProjectHR.entity.User;
 import com.ProjectHR.enums.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -21,4 +22,6 @@ public interface userRepository extends JpaRepository<User, UUID> {
     List<User> findAllByRole(Role role);
 
     List<User> findAllByRoleAndCondition(Role role, Condition condition);
+
+    Optional<User> findByUsername(String username);
 }

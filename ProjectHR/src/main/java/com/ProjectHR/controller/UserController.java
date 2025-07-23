@@ -3,18 +3,25 @@ package com.ProjectHR.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ProjectHR.dto.LoginRequest;
 import com.ProjectHR.dto.userRequestDTO;
 import com.ProjectHR.dto.userResponseDTO;
+import com.ProjectHR.entity.User;
 import com.ProjectHR.service.UserService;
+import com.ProjectHR.util.JwtUtil;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,8 +34,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class UserController {
     private final UserService userService;
 
-    public UserController(UserService userService) {
+    private final AuthenticationManager authenticationManager;
+
+    private JwtUtil jwtUtil;
+
+    public UserController(UserService userService, AuthenticationManager authenticationManager, JwtUtil jwtUtil) {
         this.userService = userService;
+        this.authenticationManager = authenticationManager;
+        this.jwtUtil = jwtUtil;
     }
 
     @GetMapping
@@ -65,6 +78,23 @@ public class UserController {
     public ResponseEntity<userResponseDTO> createUser(@Valid @RequestBody userRequestDTO userRequest) {
         userResponseDTO createdUser = userService.createUser(userRequest);
         return ResponseEntity.ok().body(createdUser);
+    }
+
+    @PostMapping("/register")
+    @Operation(summary = "Register user", description = "Register a new user")
+    public ResponseEntity<userResponseDTO> registerUser(@Valid @RequestBody userRequestDTO userRequest) {
+        userResponseDTO createdUser = userService.createUser(userRequest);
+        return ResponseEntity.ok().body(createdUser);
+    }
+
+    @PostMapping("/login")
+    @Operation(summary = "Login", description = "Authenticate user and return JWT")
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+        Authentication auth = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+        User user = (User) auth.getPrincipal();
+        String token = jwtUtil.generateToken(user.getUsername(), user.getRole().name());
+        return ResponseEntity.ok(Collections.singletonMap("token", token));
     }
 
     @PutMapping("/{id}")
