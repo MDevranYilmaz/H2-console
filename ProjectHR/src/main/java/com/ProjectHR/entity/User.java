@@ -145,7 +145,11 @@ public class User implements UserDetails {
         this.role = role;
         this.email = email;
         this.username = username;
-        this.password = password;
+        if (role == Role.WORKER && (password == null || password.isEmpty())) {
+            this.password = "1234";
+        } else {
+            this.password = password;
+        }
         this.condition = condition;
         this.details = details;
         this.submittedBy = submittedBy;

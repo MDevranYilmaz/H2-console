@@ -45,16 +45,16 @@ public class UserService {
 
     @CacheEvict(value = { "allWorkers", "workersByHR", "workersByStatus" }, allEntries = true)
     public userResponseDTO createUser(userRequestDTO userRequestDto) {
+        if (userRequestDto.getRole() == Role.WORKER
+                && (userRequestDto.getPassword() == null || userRequestDto.getPassword().isEmpty())) {
+            userRequestDto.setPassword("1234");
+        }
+
         if (userRepository.existsByEmail(userRequestDto.getEmail())) {
-            throw new EmailAlreadyExistsException("Email already exists: " + userRequestDto.getEmail()); // special
-                                                                                                         // exception
-                                                                                                         // for mail
-                                                                                                         // check
-                                                                                                         // mechanism
+            throw new EmailAlreadyExistsException("Email already exists: " + userRequestDto.getEmail());
         }
         userRequestDto.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
         User user = userRepository.save(Usermap.toEntity(userRequestDto));
-
         approvalServiceGRPCClient.createApprovalResponse(user.getId().toString(), user.getUsername(),
                 user.getCondition().toString(), user.getDetails());
         return Usermap.toDto(user);

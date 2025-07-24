@@ -15,7 +15,8 @@ public class Usermap {
         dto.setUsername(user.getUsername());
         dto.setCondition(user.getCondition());
         dto.setDetails(user.getDetails());
-        dto.setSubmittedBy(user.getSubmittedBy().toString());
+        dto.setSubmittedBy(
+                user.getSubmittedBy() != null ? user.getSubmittedBy().toString() : null);
         return dto;
     }
 

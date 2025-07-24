@@ -1,9 +1,11 @@
 package com.ProjectHR.dto;
 
+import java.io.Serializable;
+
 import com.ProjectHR.enums.Condition;
 import com.ProjectHR.enums.Role;
 
-public class userResponseDTO {
+public class userResponseDTO implements Serializable {
     private String id;
     private String firstName;
     private String lastName;

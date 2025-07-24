@@ -93,7 +93,7 @@ public class UserController {
         Authentication auth = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
         User user = (User) auth.getPrincipal();
-        String token = jwtUtil.generateToken(user.getUsername(), user.getRole().name());
+        String token = jwtUtil.generateToken(user.getId().toString(), user.getUsername(), user.getRole().name());
         return ResponseEntity.ok(Collections.singletonMap("token", token));
     }
 

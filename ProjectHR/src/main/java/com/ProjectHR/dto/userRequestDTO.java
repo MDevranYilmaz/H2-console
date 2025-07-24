@@ -1,5 +1,6 @@
 package com.ProjectHR.dto;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 import com.ProjectHR.enums.Condition;
@@ -9,7 +10,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-public class userRequestDTO {
+public class userRequestDTO implements Serializable {
     @NotBlank
     @Size(max = 100, message = "First name cannot exceed 100 characters")
     private String firstName;
